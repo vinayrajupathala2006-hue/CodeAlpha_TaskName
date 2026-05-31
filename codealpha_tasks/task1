@@ -1,0 +1,64 @@
+import random
+
+def play_hangman():
+    # 1. Predefined list of 5 words
+    word_list = ["python", "developer", "program", " vinay", "science"]
+    
+    # Randomly select a word from the list and convert it to lowercase
+    secret_word = random.choice(word_list).lower()
+    
+    # 2. Track the state of the game
+    # Create a list of underscores representing the hidden letters
+    guessed_word = ["_"] * len(secret_word)
+    
+    # Track letters the player has already guessed
+    guessed_letters = set()
+    
+    # Limit incorrect guesses to 6
+    incorrect_guesses_left = 6
+    
+    print("Welcome to Hangman!")
+    print(f"The word has {len(secret_word)} letters.")
+    
+    # 3. Main game loop using a while loop
+    while incorrect_guesses_left > 0 and "_" in guessed_word:
+        print("\n" + " ".join(guessed_word))
+        print(f"Incorrect guesses remaining: {incorrect_guesses_left}")
+        print(f"Guessed letters: {', '.join(sorted(guessed_letters)) if guessed_letters else 'None'}")
+        
+        # Get console input from the player
+        guess = input("Guess a letter: ").lower().strip()
+        
+        # Validate the input
+        if len(guess) != 1 or not guess.isalpha():
+            print("Please enter a single valid alphabet letter.")
+            continue
+            
+        if guess in guessed_letters:
+            print("You already guessed that letter! Try another one.")
+            continue
+            
+        # Add the guess to the tracking set
+        guessed_letters.add(guess)
+        
+        # 4. Check if the guess is in the secret word (if-else logic)
+        if guess in secret_word:
+            print(f"Good job! '{guess}' is in the word.")
+            # Update the hidden word display at all matching positions
+            for index, letter in enumerate(secret_word):
+                if letter == guess:
+                    guessed_word[index] = guess
+        else:
+            print(f"Sorry, '{guess}' is not in the word.")
+            incorrect_guesses_left -= 1
+
+    # 5. Game Over conditions
+    print("\n-------------------")
+    if "_" not in guessed_word:
+        print(f"Congratulations! You guessed the word: {secret_word}")
+    else:
+        print(f"Game Over! You ran out of guesses. The word was: {secret_word}")
+
+# Run the game
+if __name__ == "__main__":
+    play_hangman()
